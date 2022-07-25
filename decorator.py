@@ -21,3 +21,20 @@ def say_whee():
 say_whee()
 say_whee()
 
+
+#############
+def sort_list(func):
+    def wrapper(arr):
+        a = func(arr)
+        return sorted(a)
+
+    return wrapper
+
+
+@sort_list
+def hello(arr: list):
+    return arr
+
+
+print(hello([2, 4, 1, 3, 5, 7]))
+
