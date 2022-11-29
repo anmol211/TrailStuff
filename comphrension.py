@@ -50,3 +50,13 @@ print(timeit.timeit(get_prices_with_map, number=100))
 print(timeit.timeit(get_prices_with_loop, number=100))
 
 print(timeit.timeit(get_prices_with_filer, number=100))
+
+
+Numbers = [[1,2,3,4,5,6,7,8,9,10],
+          [11,12,13,14,15,16,17,18,19,20]]
+
+Result = [Number ** 2 for list in Numbers for Number in list if Number %2 == 0]
+print(Result)
+
+
+

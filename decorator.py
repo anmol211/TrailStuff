@@ -5,7 +5,7 @@ def count_calls(func):
     @functools.wraps(func)
     def wrapper_count_calls(*args, **kwargs):
         wrapper_count_calls.num_calls += 1
-        print(f"Call {wrapper_count_calls.num_calls} of {func.__name__!r}")
+        print(f"Call {wrapper_count_calls.num_calls} of {func.__name__}")
         return func(*args, **kwargs)
 
     print("hii")
@@ -37,4 +37,3 @@ def hello(arr: list):
 
 
 print(hello([2, 4, 1, 3, 5, 7]))
-

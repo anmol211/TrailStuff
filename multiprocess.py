@@ -1,25 +1,48 @@
 import timeit
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor, as_completed
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor, as_completed, TimeoutError
 from multiprocessing import cpu_count
+
 PRIMES = [n for n in range(100000)]
 
 
 def is_prime(n):
     for i in range(2, n):
         continue
+    return True
+
+
+def stop_process_pool(executor):
+    for pid, process in executor._processes.items():
+        process.terminate()
 
 
 def main():
     t1 = timeit.default_timer()
     print(cpu_count())
-    with ProcessPoolExecutor(max_workers=1) as executor:
-        futures = [executor.submit(is_prime, 10000001), executor.submit(is_prime, 10000001), executor.submit(is_prime, 10000001),
-                   executor.submit(is_prime, 10000001),executor.submit(is_prime, 10000001), executor.submit(is_prime, 10000001),
-                   executor.submit(is_prime, 10000001),executor.submit(is_prime, 10000001), executor.submit(is_prime, 10000001), executor.submit(is_prime, 10000001),
-                   executor.submit(is_prime, 10000001),executor.submit(is_prime, 10000001), executor.submit(is_prime, 10000001),
+    res = []
+    with ProcessPoolExecutor(max_workers=4) as executor:
+        futures = [executor.submit(is_prime, 100000001), executor.submit(is_prime, 10000001),
+                   executor.submit(is_prime, 100000001),
+                   executor.submit(is_prime, 10000001), executor.submit(is_prime, 10000001),
+                   executor.submit(is_prime, 10000001),
+                   executor.submit(is_prime, 10000001), executor.submit(is_prime, 10000001),
+                   executor.submit(is_prime, 10000001), executor.submit(is_prime, 10000001),
+                   executor.submit(is_prime, 10000001), executor.submit(is_prime, 10000001),
+                   executor.submit(is_prime, 10000001),
                    executor.submit(is_prime, 10000001)]
-        for future in as_completed(futures):
-            print(future.result())
+        try:
+            for future in as_completed(futures, timeout=1.5):
+                res.append(future.result())
+
+        except TimeoutError as e:
+            print(e)
+            print("{} in context".format(timeit.default_timer() - t1))
+            stop_process_pool(executor)
+        finally:
+            executor.shutdown()
+            print("{} in finally".format(timeit.default_timer() - t1))
+
+    print(res)
 
     print("{} Seconds Needed for ProcessPoolExecutor".format(timeit.default_timer() - t1))
 
@@ -48,4 +71,7 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    t4 = timeit.default_timer()
+    a = main()
+    print(a)
+    print("{} Seconds needed for main end".format(timeit.default_timer() - t4))

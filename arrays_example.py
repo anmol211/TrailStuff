@@ -2,6 +2,8 @@ import array
 import numpy as np
 
 list_sample = [1, 2, 3, 4, 5, 6, 7]
+
+
 a = array.array('i', list_sample)
 print(a[3:])
 
@@ -32,7 +34,6 @@ print(find_pair([11, 15, 6, 8, 9, 10], 16))
 
 
 def rotate_count(_list: list):
-    n = len(_list)
     min_value = min(_list)
     ro_index = _list.index(min_value)
     return ro_index

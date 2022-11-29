@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class Subscriber:
+class Subscriber(ABC):
 
     @abstractmethod
     def notify(self, msg):

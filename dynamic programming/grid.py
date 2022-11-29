@@ -18,3 +18,5 @@ def grid_dp(width, height):
                 bottom = dp[h - 1][w]
                 dp[h][w] = right + bottom
     return dp[height][width]
+
+print(grid(3,3))
